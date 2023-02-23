@@ -61,7 +61,8 @@
 
 
 **1. DBeaver를 사용하여 hobby테이블을 생성하시오(hobbyid, content, location)** <br>
-<img src="img/dbeaver_20230223.png">
+![dbeaver_20230223.PNG](./img/dbeaver_20230223.PNG)
+
 
 <br>
 
