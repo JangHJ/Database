@@ -1,0 +1,398 @@
+CREATE TABLE “HR”.“MEMBER”
+  (	“ID” VARCHAR2(10),
+	“PW” VARCHAR2(10),
+	“NAME” VARCHAR2(10),
+	“TEL” VARCHAR2(10)
+  )
+  
+CREATE TABLE “HR”.“BBS”
+(	
+	“no” VARCHAR2(100),
+	“TITLE” VARCHAR2(100),
+	“CONTENT” VARCHAR2(100),
+	“WRITER” VARCHAR2(100)
+)
+  
+CREATE TABLE PRODUCT(
+ID VARCHAR2(200),
+NAME VARCHAR2(200),
+CONTENT VARCHAR2(200),
+PRICE VARCHAR2(200),
+COMPANY VARCHAR2(200),
+IMG VARCHAR2(200)
+)
+
+-- 저장할 대상: 엔티티(회원정보, 게시판, 상품), 엔티티의 관계: 회원이 상품을 주문하다(주문정보)
+--				엔티티 + 관계 ==> 테이블로 만들자!
+
+CREATE TABLE orderlist (
+	"no" VARCHAR2(100),
+	member_id varchar2(100),
+	product_id varchar2(100),
+	total_count varchar2(100)
+)
+
+
+-- DDL, DML 확인문제
+CREATE TABLE depart (
+	id VARCHAR2(100),
+	name varchar2(100),
+	instuctor varchar2(100),
+	CONSTRAINT "DEPART_PK" PRIMARY KEY (id)
+)
+
+CREATE TABLE depart (
+	id VARCHAR2(100),
+	name varchar2(100),
+	instuctor varchar2(100)
+)
+
+ALTER TABLE depart ADD CONSTRAINT DEPART_PK PRIMARY KEY (ID)
+
+INSERT INTO depart VALUES ('101', '컴퓨터공학과', '김철수')
+
+INSERT INTO depart VALUES ('102', '국어국문학과', '김영희')
+
+SELECT * FROM depart
+
+-- ALTER TABLE HR.STUDENT RENAME COLUMN TOTAL_COUNT TO DEPART_ID;
+
+CREATE TABLE student (
+	id VARCHAR2(100),
+	name varchar2(100) NOT NULL,
+	tel varchar2(100),
+	depart_id varchar2(100)
+)
+
+CREATE TABLE student (
+	id VARCHAR2(100),
+	name varchar2(100) NOT NULL,
+	tel varchar2(100),
+	depart_id varchar2(100),
+	CONSTRAINT "STUDENT_PK" PRIMARY KEY,
+	CONSTRAINT "FK_DEPART" FOREIGN KEY REFERENCES HR.DEPART(ID)
+)
+
+ALTER TABLE HR.STUDENT ADD CONSTRAINT STUDENT_PK PRIMARY KEY (ID)
+
+ALTER TABLE HR.STUDENT ADD CONSTRAINT FK_DEPART FOREIGN KEY (DEPART_ID) REFERENCES HR.DEPART(ID);
+
+INSERT INTO HR.STUDENT VALUES ('2023111', '홍길동', '010-1111-1111', '101')
+
+INSERT INTO HR.STUDENT VALUES ('2023222', '고길동', '010-2222-2222', '102')
+
+SELECT * FROM HR.STUDENT
+
+CREATE TABLE subject (
+	id VARCHAR2(100),
+	title varchar2(100),
+	depart_id varchar2(100)
+)
+
+CREATE TABLE subject (
+	id VARCHAR2(100),
+	title varchar2(100),
+	depart_id varchar2(100)
+	CONSTRAINT "SUBJECT_PK" PRIMARY KEY,
+	CONSTRAINT "FK_DEPART2" FOREIGN KEY REFERENCES HR.DEPART(ID)
+)
+
+INSERT INTO HR.SUBJECT VALUES ('1000', '자바프로그래밍', '101')
+
+INSERT INTO HR.SUBJECT VALUES ('2000', '국어정서법', '102')
+
+SELECT * FROM SUBJECT
+
+ALTER TABLE HR.SUBJECT ADD CONSTRAINT SUBJECT_PK PRIMARY KEY (ID)
+
+ALTER TABLE HR.SUBJECT ADD CONSTRAINT FK_DEPART2 FOREIGN KEY (DEPART_ID) REFERENCES HR.DEPART(ID)
+
+UPDATE SUBJECT SET DEPART_ID='102' WHERE id='222'
+
+UPDATE SUBJECT SET TITLE='국어정서법' WHERE id='222'
+
+
+CREATE TABLE "HR"."BBS2" 
+(	"no" VARCHAR2(100), 
+	"TITLE" VARCHAR2(100), 
+	"CONTENT" VARCHAR2(100), 
+	"WRITER" VARCHAR2(100), 
+	 CONSTRAINT "BBS_PK22" PRIMARY KEY ("no"),
+	 CONSTRAINT "FK_MEMBER22" FOREIGN KEY ("WRITER")
+	  REFERENCES "HR"."MEMBER" ("ID")
+) 
+
+CREATE TABLE "HR"."BBS3" 
+(	"no" VARCHAR2(100), 
+	"TITLE" VARCHAR2(100), 
+	"CONTENT" VARCHAR2(100), 
+	"WRITER" VARCHAR2(100)
+)
+
+-- member 테이블 복사
+CREATE TABLE member22
+AS SELECT * FROM MEMBER
+
+ALTER TABLE HR.MEMBER22 ADD TEAM DATE NULL;
+
+INSERT INTO MEMBER22 
+VALUES ('banana3', 'banana3', 'banana3', 'banana3', sysdate)
+
+ALTER TABLE HR.MEMBER22 ADD COMPANY VARCHAR2(100) DEFAULT 'multi' NOT NULL;
+
+-- not enough values 입력하려는 value의 개수가 적을 때
+-- to many values 입력하려는 value의 개수가 더 많을 때
+
+INSERT INTO MEMBER22 
+VALUES ('banana4', 'banana4', 'banana4', 'banana4', sysdate, 'aaa')
+
+SELECT * FROM MEMBER22
+
+ALTER TABLE HR.MEMBER22 ADD LOCATION VARCHAR2(100);
+
+ALTER TABLE HR.MEMBER22
+ADD CONSTRAINT MEMBER22_UN UNIQUE (LOCATION)
+ENABLE;
+
+INSERT INTO bbs3
+VALUES (bbs_id_seq.nextval, 'happy', 'happy day', 'ice')
+
+INSERT INTO bbs3
+VALUES (bbs_id_seq.nextval, 'happy3', 'happy day3', 'ice')
+
+SELECT * FROM BBS3
+
+CREATE SEQUENCE pd_id_seq
+INCREMENT BY 1
+MINVALUE 1
+START with 1
+
+CREATE TABLE product2 (
+	id number(38, 0),
+	name varchar2(100)
+)
+
+INSERT INTO PRODUCT2 
+VALUES (pd_id_seq.nextval, 'banana')
+
+INSERT INTO PRODUCT2 
+VALUES (pd_id_seq.nextval, 'apple')
+
+INSERT INTO PRODUCT2 
+VALUES (pd_id_seq.nextval, 'pear')
+
+SELECT * FROM product2
+
+-- 연습문제
+CREATE TABLE orderlist3(
+	id number(38, 0),
+	title varchar2(100),
+	price number(38, 0)
+)
+
+CREATE SEQUENCE or_seq
+INCREMENT BY 1
+MINVALUE 1
+START with 1
+
+INSERT INTO ORDERLIST3
+VALUES (or_seq.nextval, 'ice1', 1000)
+
+INSERT INTO ORDERLIST3
+VALUES (or_seq.nextval, 'ice2', 2500)
+
+INSERT INTO ORDERLIST3
+VALUES (or_seq.nextval, 'ice3', 3000)
+
+INSERT INTO ORDERLIST3
+VALUES (or_seq.nextval, 'ice4', 3000)
+
+INSERT INTO ORDERLIST3
+VALUES (or_seq.nextval, 'ice5', 3000)
+
+SELECT * FROM ORDERLIST3
+
+SELECT * FROM ORDERLIST3
+ORDER BY id -- 오름차순
+
+SELECT * FROM ORDERLIST3
+ORDER BY id DESC -- 내림차순
+
+CREATE TABLE "HR"."MEMBER4" 
+(	ID VARCHAR2(100), 
+	PW VARCHAR2(100), 
+	NAME VARCHAR2(100), 
+	TEL VARCHAR2(100),
+	TEAM DATE, --나중에 sysdate기입
+	COMPANY VARCHAR2(100) DEFAULT 'multi' NOT NULL,
+	LOCATION VARCHAR2(100) UNIQUE
+) 
+
+CREATE TABLE DEPT
+(
+	DEPTNO NUMBER(2),
+	DNAME VARCHAR2(14 BYTE),
+	LOC VARCHAR2(13 BYTE)
+)
+
+CREATE TABLE EMP
+(
+	EMPNO NUMBER(4),
+	ENAME VARCHAR2(10 BYTE),
+	JOB VARCHAR2(9 BYTE),
+	MGR NUMBER(4),
+	HIREDATE DATE,
+	SAL NUMBER(7,2),
+	COMM NUMBER(7,2),
+	DEPTNO NUMBER(2)
+)
+
+CREATE TABLE SALGRADE
+(
+	GRADE NUMBER,
+	LOSAL NUMBER,
+	HISAL NUMBER
+)
+
+ALTER TABLE DEPT ADD (
+	CONSTRAINT PK_DEPT
+	PRIMARY KEY
+	(DEPTNO)
+);
+
+ALTER TABLE EMP ADD (
+	CONSTRAINT PK_EMP
+	PRIMARY KEY
+	(EMPNO)
+);
+
+ALTER TABLE EMP ADD (
+	CONSTRAINT FK_DEPTNO
+	FOREIGN KEY (DEPTNO)
+	REFERENCES DEPT (DEPTNO)
+);
+
+SELECT * FROM EMP
+
+SELECT deptno FROM emp
+
+SELECT DISTINCT deptno FROM emp -- DISTINCT
+
+SELECT ename, sal * 12 FROM EMP
+
+SELECT * FROM EMP
+ORDER BY sal DESC
+
+SELECT * FROM EMP
+WHERE DEPTNO = 30
+ORDER BY empno DESC
+
+SELECT * FROM EMP
+WHERE sal >= 3000
+
+SELECT * FROM EMP
+WHERE sal != 3000
+
+SELECT * FROM EMP
+WHERE job IN ('SALESMAN', 'MANAGER')
+ORDER BY JOB 
+
+SELECT * FROM EMP
+WHERE job NOT IN ('SALESMAN', 'MANAGER')
+ORDER BY JOB 
+
+SELECT * FROM EMP
+WHERE sal BETWEEN 2000 AND 3000
+ORDER BY EMPNO 
+
+SELECT * FROM EMP
+WHERE sal NOT BETWEEN 2000 AND 3000
+ORDER BY EMPNO 
+
+SELECT * FROM EMP
+WHERE ENAME LIKE '_L%'
+
+SELECT * FROM EMP
+WHERE ENAME NOT LIKE '_L%'
+
+SELECT * FROM EMP
+WHERE COMM IS NULL 
+
+SELECT * FROM EMP
+WHERE COMM IS NOT NULL
+
+CREATE TABLE dept_temp2
+AS SELECT * FROM DEPT
+
+SELECT * FROM dept_temp2
+
+UPDATE DEPT_TEMP2
+SET loc = 'SEOUL'
+
+SELECT * FROM DEPT_TEMP2 dt
+
+UPDATE DEPT_TEMP2
+SET dname = 'DATABASE', loc = 'BUSAN'
+WHERE DEPTNO = 40
+
+DELETE FROM DEPT_TEMP2 dt
+WHERE dname = 'SALES'
+
+SELECT * FROM DEPT_TEMP2
+
+-- select update delete 정리문제
+-- 1. price는 number(oracle), int(mysql)
+-- 2. price로 내림차순 정렬하여 전체컬럼 검색
+SELECT * FROM PRODUCT
+ORDER BY PRICE
+
+-- 3. company로 오름차순 정렬하여 제품의 이름, 내용, 가격 검색
+SELECT name, content, price FROM PRODUCT
+ORDER BY COMPANY
+
+-- 4. company의 목록을 검색(중복제거)
+SELECT DISTINCT company FROM PRODUCT 
+
+-- 5. 각 신발을 5개씩 주문했을 때의 가격을 price5라고 항목명을 지정하여 출력
+SELECT name, content, company, price * 5 AS "price5" FROM PRODUCT
+
+-- 6. price가 5000인 제품명과 회사명
+SELECT name, company FROM PRODUCT
+WHERE price = 5000
+
+-- 7. price가 3000와 6000사이인 제품명과 가격, 회사명 검색
+SELECT name, price, company FROM PRODUCT
+WHERE price >= 5000 AND price <= 6000
+
+-- 8. 회사명이 c100이 아닌 회사명과 제품명
+SELECT COMPANY, name FROM PRODUCT
+WHERE company != 'c100'
+
+-- 9. 회사명이 c100, c200인 제품명과 가격
+SELECT name, price FROM PRODUCT
+WHERE company = 'c100' OR COMPANY = 'c200'
+
+
+-- 10. 제품명에 4로 끝나는 제품의 전체 정보 검색
+SELECT * FROM PRODUCT
+WHERE name like '%4'
+
+-- 11. 제품내용에 food를 포함하는 제품의 전체 정보 검색
+SELECT * FROM PRODUCT
+WHERE CONTENT LIKE '%food%'
+
+-- 12. price가 5000원인 제품의 content를 품절로 수정
+UPDATE PRODUCT
+SET content = '품절'
+WHERE PRICE = 5000
+
+-- 13. id가 100, 102번 제품의 img를 o.png로, price를 10000으로 수정
+UPDATE PRODUCT
+SET img = 'o.png', price = 10000
+WHERE id=100 OR id=102
+
+-- 14. 회사명이 c100인 경우 모든 정보 삭제
+DELETE FROM PRODUCT WHERE COMPANY = 'c100'
+
+-- 15. 테이블의 모든 정보 삭제
+DELETE FROM PRODUCT
