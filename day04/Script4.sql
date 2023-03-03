@@ -197,4 +197,70 @@ WHERE sal >= 3000 AND comm IS NOT NULL
 ORDER BY sal desc
 
 
+-- join 왜 하는가? 검색을 하고 싶은데 항목들이 여러개의 테이블에 흩어져 있는 경우 테이블을 모아서 검색
+-- 2개의 테이블의 공통된 값들만 조인해서 검색
+
+SELECT *
+FROM "MEMBER" m, BBS b
+WHERE m.ID = b.WRITER
+
+SELECT b."no", title, name
+FROM "MEMBER" m, BBS b
+WHERE m.ID = b.WRITER
+
+
+-- Inner join : 테이블간 공통된 값만 추출
+-- emp 테이블과 dept테이블을 조인하세요
+-- 하나의 컬럼 이상이 동일한 컬럼이 있어야 함.
+-- empno, ename, job, deptno, loc 컬럼 검색
+-- 조인조건 : deptno
+SELECT * FROM EMP
+
+SELECT * FROM dept
+
+SELECT e.empno, e.ename, e.job, d.deptno, d.loc
+FROM emp e, DEPT d
+WHERE e.DEPTNO = d.DEPTNO
+ORDER BY empno
+
+SELECT *
+FROM "MEMBER" m 
+LEFT OUTER JOIN BBS b
+ON (m.ID = b.WRITER)
+
+SELECT *
+FROM "MEMBER" m 
+RIGHT OUTER JOIN BBS b
+ON (m.ID = b.WRITER)
+
+-- left/right outer JOIN 
+-- emp 테이블의 정보를 다 보이게 하고 싶음
+-- dept는 맞는 것만 오른쪽에 붙여주고 싶다.
+SELECT *
+FROM emp e
+RIGHT OUTER JOIN dept d
+ON (e.DEPTNO = d.DEPTNO)
+
+-- dept 테이블의 정보를 다 보이게 하고 emp는 맞는 것만 오른쪽에 붙여줌
+SELECT *
+FROM dept d
+RIGHT OUTER JOIN EMP e
+ON (d.DEPTNO = e.DEPTNO)
+
+-- member table과 bbs table의 inner join하시오.(조인 조건 bbs의 writer, member의 id)
+SELECT *
+FROM "MEMBER" m, BBS b
+WHERE m.ID = b.WRITER
+
+-- member table과 bbs table의 left outer join하시오.(조인 조건 bbs의 writer, member의 id)
+SELECT *
+FROM "MEMBER" m
+LEFT OUTER JOIN BBS b
+ON (m.id = b.WRITER)
+
+-- member table과 bbs table의 right outer join하시오.(조인 조건 bbs의 writer, member의 id)
+SELECT *
+FROM "MEMBER" m
+RIGHT OUTER JOIN BBS b
+ON (m.id = b.WRITER)
 
