@@ -120,7 +120,23 @@ SELECT empno, ename, job, sal,
 		END AS level_result
 		FROM emp
 
+SELECT * FROM EMP
+
 -- 집계/그룹함수
+SELECT count(sal)
+FROM EMP
+
+SELECT count(sal), sum(sal), avg(sal), min(sal), max(sal)
+FROM EMP
+WHERE job = 'SALESMAN'
+
+SELECT JOB, count(sal), sum(sal), avg(sal), min(sal), max(sal)
+FROM EMP
+GROUP BY JOB
+HAVING count(sal) >= 4 --그룹을 지어서 검색 후, 필터링을 하고자 하는 경우
+ORDER BY job DESC -- 이미 모든 검색이 다 끝난 후, 그 결과를 정렬하고자 하는 경우, 맨 끝
+
+
 SELECT avg(sal) FROM EMP
 GROUP BY deptno -- deptno별로 sal평균
 
@@ -133,7 +149,52 @@ GROUP BY DEPTNO
 HAVING AVG(SAL) >= 2000 -- 조건은 HAVING으로 써야함.!
 ORDER BY DEPTNO desc;  -- deptno별로 sal평균을 내되 평균이 2000이상인 값만 내림차순으로 출력
 
+SELECT * FROM EMP
 
+-- 1. 전체 직원수 출력
+SELECT count(empno) FROM emp
+
+-- 2. DEPTNO가 20이거나 MGR이 7700이하인 직원수 출력
+SELECT count(empno) FROM emp WHERE deptno = 20 OR mgr <= 7700
+
+-- 3. DEPTNO가 10 또는 20인 직원의 SAL최저 출력
+SELECT min(sal) FROM emp WHERE deptno = 10 OR DEPTNO = 20
+
+-- 4. 직원의 SAL 최저, 최고, 합계 출력
+SELECT min(sal), max(sal), sum(sal) FROM emp
+
+-- 5. DEPTNO별  SAL 평균 출력
+SELECT deptno, avg(sal)
+FROM EMP
+GROUP BY deptno
+
+-- 6. DEPTNO별  SAL 합계를 DEPTNO 오름차순으로 출력
+SELECT deptno, sum(sal)
+FROM EMP
+GROUP BY deptno
+ORDER BY DEPTNO 
+
+-- 7. DEPTNO별  SAL 평균이 2000이상인 SAL평균을 DEPTNO역순으로 출력
+SELECT deptno, avg(sal)
+FROM EMP
+GROUP BY deptno
+HAVING avg(sal) >= 2000
+ORDER BY DEPTNO desc
+
+-- 8. JOB이 MANAGER인 직원의 전체 수, 월급의 평균 검색
+SELECT count(empno), avg(sal)
+FROM EMP
+WHERE job = 'MANAGER'
+
+-- 9. ENAME에 S를 포함하는 직원의 전체 수를 검색
+SELECT count(*)
+FROM EMP
+WHERE ename LIKE '%S%'
+
+-- 10. SAL이 3000이상이고,  COMM이 null이 아닌 직원의 전체 수 검색, SAL의 역순으로 출력
+SELECT * FROM emp
+WHERE sal >= 3000 AND comm IS NOT NULL
+ORDER BY sal desc
 
 
 
