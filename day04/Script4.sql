@@ -264,3 +264,38 @@ FROM "MEMBER" m
 RIGHT OUTER JOIN BBS b
 ON (m.id = b.WRITER)
 
+CREATE TABLE company (
+	id varchar2(200) PRIMARY KEY,
+	name varchar2(200),
+	addr varchar2(200),
+	tel varchar2(200)
+)
+
+INSERT INTO company VALUES ('c100', 'good', 'seoul', '011')
+
+INSERT INTO company VALUES ('c200', 'joa', 'busan', '012')
+
+INSERT INTO company VALUES ('c300', 'maria', 'ulsan', '013')
+
+INSERT INTO company VALUES ('c400', 'my', 'kwangju', '014')
+
+SELECT * FROM COMPANY
+
+SELECT * FROM PRODUCT
+
+-- company테이블 product테이블
+SELECT *
+FROM company c, PRODUCT p
+WHERE c.ID = p.company
+
+-- member table과 bbs table의 left outer join하시오.(조인 조건 bbs의 writer, member의 id)
+SELECT *
+FROM company c
+LEFT OUTER JOIN PRODUCT p
+ON (c.ID = p.company)
+
+-- member table과 bbs table의 right outer join하시오.(조인 조건 bbs의 writer, member의 id)
+SELECT *
+FROM company c
+RIGHT OUTER JOIN PRODUCT p
+ON (c.ID = p.COMPANY)
