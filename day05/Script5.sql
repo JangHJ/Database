@@ -159,3 +159,77 @@ SELECT * FROM HR.STUDENT_INFO WHERE 학생번호 IN
 	
 SELECT * FROM HR.RECORD WHERE 강좌이름 =
 	(SELECT 강좌이름 FROM HR.SUBJECT WHERE 강의실 = '공학관110')
+	
+	
+-- ===============================================
+CREATE TABLE gitmember(
+	ID varchar2(100),
+	PW varchar2(100),
+	EMAIL varchar2(200),
+	LOCATION varchar2(200),
+	CONSTRAINT "GITMEMBER_PK" PRIMARY KEY (ID)
+)
+
+CREATE TABLE repositories(
+	name varchar2(100),
+	language varchar2(100),
+	writer varchar2(100),
+	CONSTRAINT "REPOSITORIES_PK" PRIMARY KEY (name),
+	CONSTRAINT FK_GITMEMBER FOREIGN KEY (writer)
+	  REFERENCES HR.gitmember (ID)
+)
+
+CREATE TABLE contents(
+	parent varchar2(100), --상위 폴더
+	filename varchar2(100),
+	message varchar2(100),
+	uploadtime date,
+	CONSTRAINT fk_repositories1 FOREIGN KEY (parent)
+	  REFERENCES HR.repositories (name)
+)
+
+SELECT * FROM gitmember
+
+SELECT * FROM REPOSITORIES
+
+SELECT * FROM contents
+
+INSERT INTO gitmember
+VALUES('apple', 'apple', 'apple@naver.com', '서울')
+
+INSERT INTO gitmember
+VALUES('ice', 'ice', 'ice@naver.com', '경기도')
+	
+UPDATE gitmember
+SET (LOCATION) = '제주도'
+WHERE (ID) = 'apple' AND (EMAIL) = 'apple@naver.com'
+
+DELETE FROM GITMEMBER WHERE (ID) = 'apple' -- REPOSITORIES FK로 참조되어있는 상태기 때문에 삭제불가
+
+INSERT INTO REPOSITORIES
+VALUES('Java_basic', 'Java', 'apple')
+
+INSERT INTO REPOSITORIES
+VALUES('Database', 'Java', 'ice')
+
+UPDATE REPOSITORIES
+SET (LANGUAGE) = 'SQL'
+WHERE (WRITER) = 'ice'
+
+DELETE FROM REPOSITORIES WHERE (title) = '501'
+
+
+
+INSERT INTO CONTENTS
+VALUES('Java_basic', '영화예매좌석만들기.java', 'day01 자바 실습내용', sysdate)
+
+INSERT INTO CONTENTS
+VALUES('Database', 'Script.sql', 'oracle 실습 코드', sysdate)
+
+	
+SELECT g.ID, g.EMAIL, r.NAME, r.LANGUAGE, c.FILENAME, c.MESSAGE, c.UPLOADTIME AS 작성시간
+FROM GITMEMBER g, REPOSITORIES r, CONTENTS c 
+WHERE g.ID = r.WRITER AND r.NAME = c.PARENT
+	
+	
+
